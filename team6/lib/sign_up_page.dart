@@ -238,7 +238,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                                   actions: [
                                     ElevatedButton(
                                         onPressed: () {
-                                          context.go('/Map');
+                                          context.go('/');
                                         },
                                         child: Text("확인", style: TextStyle(
                                           color: Colors.black,

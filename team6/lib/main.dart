@@ -66,6 +66,12 @@ final GoRouter _router = GoRouter(
         return const OwnerProfile();
       },
     ),
+    GoRoute(
+      path: '/Waiting',
+      builder: (context, state) {
+        return const WaitingPage();
+      },
+    ),
   ],
 );
 

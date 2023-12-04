@@ -42,8 +42,8 @@ class _MapPageState extends ConsumerState<MapPage> {
                   markers: Set.from(provider.markers),
                 ),
                 Positioned(
-                  top: 10,
-                  right: 10,
+                  top: 20,
+                  right: 20,
                   child: GestureDetector(
                     onTap: () {
                       context.go('/Profile');
@@ -51,17 +51,25 @@ class _MapPageState extends ConsumerState<MapPage> {
                     },
                     child: ClipOval(
                       child: Container(
-                        color: Colors.grey,
                         width: 50,
                         height: 50,
-                        child: Center(child: Text("Profile")),
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                        ),
+                        child: const FittedBox(
+                          fit: BoxFit.fill,
+                          child: Icon(
+                            Icons.favorite,
+                            color: Colors.red,
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
                 Positioned(
                   top: 100,
-                  right: 10,
+                  right: 20,
                   child: GestureDetector(
                     onTap: () async {
                       await provider.cvsLocation();
@@ -70,10 +78,18 @@ class _MapPageState extends ConsumerState<MapPage> {
                     },
                     child: ClipOval(
                       child: Container(
-                        color: Colors.grey,
                         width: 50,
                         height: 50,
-                        child: Center(child: Text("CVS")),
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                        ),
+                        child: FittedBox(
+                          fit: BoxFit.fill,
+                          child: Icon(
+                            Icons.storefront_sharp,
+                            color: color2,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -100,9 +116,11 @@ class _MapPageState extends ConsumerState<MapPage> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Image.network(provider
-                                  .selectedStore.imageUrl ??
-                              "https://gdimg.gmarket.co.kr/3014545259/still/400?ver=1687144763"),
+                          child: provider.selectedStore.imageUrl == null
+                              ? const SizedBox(
+                                  width: 10,
+                                )
+                              : Image.asset(provider.selectedStore.imageUrl!),
                         ),
                         Container(
                           width: 300,
@@ -143,8 +161,8 @@ class _MapPageState extends ConsumerState<MapPage> {
                               if (provider.selectedStore.id == null) {
                                 return;
                               }
-                              context.push('/CVS');
                               provider.storeInformation(provider.selectedStore);
+                              context.push('/CVS');
                             },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: color2,
@@ -173,6 +191,17 @@ class _MapPageState extends ConsumerState<MapPage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class WaitingPage extends StatelessWidget {
+  const WaitingPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Image.asset('assets/Waiting.png'),
     );
   }
 }

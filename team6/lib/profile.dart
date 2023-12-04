@@ -24,11 +24,13 @@ class ProfilePage extends ConsumerWidget {
             children: [
               Container(
                 width: 200,
-                child: Text(
-                  "${provider.me.cId!}의 Favorites",
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
+                child: const Center(
+                  child: Text(
+                    "My Favorites",
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
@@ -308,14 +310,30 @@ class MyOrder extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(provider.myOrder[index].pName ?? ""),
-                    Text(provider.myOrder[index].pPrice.toString()),
-                    Text(provider.myOrder[index].quantity.toString()),
-                    Text(provider.myOrder[index].category ?? ""),
-                    Text(provider.myOrder[index].arrivalState ?? ""),
-                    Text(provider.myOrder[index].arrival == null
-                        ? ""
-                        : provider.myOrder[index].arrival!.substring(0, 10)),
+                    Text(
+                      provider.myOrder[index].pName ?? "",
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      provider.myOrder[index].pPrice.toString(),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      provider.myOrder[index].quantity.toString(),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      provider.myOrder[index].category ?? "",
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      provider.myOrder[index].arrivalState ?? "",
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      provider.myOrder[index].arrival ?? "",
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ],
                 ),
               ),
@@ -334,80 +352,101 @@ class MyTopProduct extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(viewmodel);
-    return Container(
-      width: 202,
-      height: 322,
-      margin: const EdgeInsets.all(20),
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: color2, width: 1),
-          boxShadow: const [
-            BoxShadow(
-              blurRadius: 8,
-              color: Color(0xFF909090),
-            )
-          ]),
-      child: Column(
-        children: [
-          Container(
-            width: 180,
-            height: 150,
-            margin: const EdgeInsets.only(bottom: 10),
-            child: Image.network(
-              provider.selectedStore.products[index].imageUrl ??
-                  "https://gdimg.gmarket.co.kr/3014545259/still/400?ver=1687144763",
-            ),
-          ),
-          Row(
+    return Stack(
+      children: [
+        Container(
+          width: 202,
+          height: 322,
+          margin: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: color2, width: 1),
+              boxShadow: const [
+                BoxShadow(
+                  blurRadius: 8,
+                  color: Color(0xFF909090),
+                )
+              ]),
+          child: Column(
             children: [
               Container(
-                width: 70,
-                height: 140,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("${index + 1} 위 상품"),
-                    const Text("상품명"),
-                    const Text("가격"),
-                    const Text("수량"),
-                    const Text("카테고리"),
-                  ],
+                width: 180,
+                height: 150,
+                margin: const EdgeInsets.only(bottom: 10),
+                child: Image.network(
+                  provider.selectedStore.products[index].imageUrl ??
+                      "https://gdimg.gmarket.co.kr/3014545259/still/400?ver=1687144763",
                 ),
               ),
-              Container(
-                width: 110,
-                height: 140,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("  "),
-                    Text(provider.selectedStore.products[index].name ?? ""),
-                    Text(provider.selectedStore.products[index].price
-                        .toString()),
-                    Text(provider.selectedStore.products[index].quantity
-                        .toString()),
-                    Text(
-                      provider.selectedStore.products[index].category == null
-                          ? ""
-                          : provider.selectedStore.products[index].category!
-                              .substring(
-                                  0,
-                                  min(
-                                      provider.selectedStore.products[index]
-                                          .category!.length,
-                                      10)),
-                    )
-                  ],
-                ),
+              Row(
+                children: [
+                  Container(
+                    width: 70,
+                    height: 140,
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("상품명"),
+                        Text("가격"),
+                        Text("수량"),
+                        Text("카테고리"),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: 110,
+                    height: 140,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          provider.selectedStore.products[index].name ?? "",
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(provider.selectedStore.products[index].price
+                            .toString()),
+                        Text(provider.selectedStore.products[index].quantity
+                            .toString()),
+                        Text(
+                          provider.selectedStore.products[index].category ?? "",
+                          overflow: TextOverflow.ellipsis,
+                        )
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        ),
+        Positioned(
+          left: 50,
+          right: 50,
+          top: 5,
+          child: Container(
+            width: 150,
+            height: 30,
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: 1,
+                color: color1,
+              ),
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
+            ),
+            child: Center(
+              child: Text(
+                "${index + 1} 위 상품",
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -441,9 +480,7 @@ class MyCVS extends ConsumerWidget {
           Container(
             height: double.infinity,
             width: (size.width * 0.6 - 62) / 5,
-            child: provider.myCVS[index].imageUrl == null
-                ? const Placeholder()
-                : Image.network(provider.myCVS[index].imageUrl!),
+            child: Image.asset(provider.myCVS[index].imageUrl!),
           ),
           Container(
             padding: const EdgeInsets.all(10),
@@ -452,33 +489,71 @@ class MyCVS extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  provider.myCVS[index].name!,
-                  style: const TextStyle(
-                    fontSize: 21,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Icon(Icons.store),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      provider.myCVS[index].name!,
+                      style: const TextStyle(
+                        fontSize: 21,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  provider.myCVS[index].address!,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Icon(Icons.place),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      provider.myCVS[index].address!,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  "Tel.${provider.myCVS[index].pNumber}",
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Icon(Icons.phone),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      provider.myCVS[index].pNumber.toString() == "nan"
+                          ? ""
+                          : provider.myCVS[index].pNumber.toString(),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  "총 매출 액 : ${provider.myCVS[index].revenue.toString()}",
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Icon(Icons.attach_money),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      provider.myCVS[index].revenue.toString(),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

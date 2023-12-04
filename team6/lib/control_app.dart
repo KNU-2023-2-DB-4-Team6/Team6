@@ -9,7 +9,7 @@ import 'package:team6/class/models.dart';
 final viewmodel = ChangeNotifierProvider<ViewModel>((ref) => ViewModel());
 
 class ViewModel extends ChangeNotifier {
-  final serverUrl = 'http://192.168.97.100:8080';
+  final serverUrl = 'http://172.30.1.62:8080';
   Client me = Client();
   Owner me2 = Owner();
   String state = "client";
@@ -24,8 +24,9 @@ class ViewModel extends ChangeNotifier {
   List<CVS> myCVS = <CVS>[];
   List<Porder> myOrder = <Porder>[];
   String selectedCondition = "order";
+  bool storeLoading = true;
 
-  void seletedConditionChange(String condition){
+  void seletedConditionChange(String condition) {
     selectedCondition = condition;
     notifyListeners();
   }
@@ -197,7 +198,15 @@ class ViewModel extends ChangeNotifier {
       selectedStore.address = parsedData['address'];
       selectedStore.pNumber =
           parsedData['phoneNumber'] == "nan" ? null : parsedData['phoneNumber'];
-      selectedStore.imageUrl = parsedData['image_Url'];
+      if (parsedData['name'][0] == 'G') {
+        selectedStore.imageUrl = 'assets/GS.png';
+      } else if (parsedData['name'][0] == 'E') {
+        selectedStore.imageUrl = 'assets/E24.png';
+      } else if (parsedData['name'][0] == 'C') {
+        selectedStore.imageUrl = 'assets/CU.png';
+      } else if (parsedData['name'][0] == '7') {
+        selectedStore.imageUrl = 'assets/Seven.png';
+      }
       notifyListeners();
       return 1;
     } catch (e) {
@@ -208,6 +217,7 @@ class ViewModel extends ChangeNotifier {
   Future<int> storeInformation(CVS store) async {
     try {
       selectedStore = store;
+      storeLoading = true;
       selectedStore.products = [];
       for (String categoryName in category) {
         selectedStore.productForCategory[categoryName] = [];
@@ -224,6 +234,7 @@ class ViewModel extends ChangeNotifier {
         selectedStore.products.add(newProduct);
         selectedStore.productForCategory[newProduct.category!]!.add(newProduct);
       }
+      storeLoading = false;
       notifyListeners();
       return 1;
     } catch (e) {
@@ -239,7 +250,6 @@ class ViewModel extends ChangeNotifier {
           Uri.parse("$serverUrl/product/event?productId=$id"),
           headers: {'Content-Type': 'application/json'});
       for (var event in jsonDecode(utf8.decode(response.bodyBytes)) as List) {
-        print(presentEvent);
         Event newEvent = Event();
         newEvent.name = event['eventName'];
         newEvent.estart = event['start'];
@@ -291,7 +301,6 @@ class ViewModel extends ChangeNotifier {
       var response = await http.get(
           Uri.parse("$serverUrl/favorite?clientId=${me.cId}"),
           headers: {'Content-Type': 'application/json'});
-      print(jsonDecode(utf8.decode(response.bodyBytes)));
       for (var favor in jsonDecode(utf8.decode(response.bodyBytes)) as List) {
         Favorite newFavorite = Favorite();
         newFavorite.cvsId = favor['storeId'];
@@ -328,7 +337,15 @@ class ViewModel extends ChangeNotifier {
         newCVS.id = mycvs['storeId'];
         newCVS.pNumber = mycvs['phoneNumber'];
         newCVS.name = mycvs['name'];
-        newCVS.imageUrl = mycvs['image_Url'];
+        if (mycvs['name'][0] == 'G') {
+        newCVS.imageUrl = 'assets/GS.png';
+      } else if (mycvs['name'][0] == 'E') {
+        newCVS.imageUrl = 'assets/E24.png';
+      } else if (mycvs['name'][0] == 'C') {
+        newCVS.imageUrl = 'assets/CU.png';
+      } else if (mycvs['name'][0] == '7') {
+        newCVS.imageUrl = 'assets/Seven.png';
+      }
         newCVS.revenue = mycvs['revenue'];
         myCVS.add(newCVS);
       }
@@ -437,8 +454,10 @@ class ViewModel extends ChangeNotifier {
         newPorder.arrival = porder['arrival_time'];
         newPorder.arrivalState = porder['arrival_state'];
         newPorder.quantity = porder['product_quantity'];
-        newPorder.pName = porder['productId'];
+        newPorder.pName = porder['productName'];
         newPorder.imageUrl = porder['image_Url'];
+        newPorder.pPrice = porder['productPrice'];
+        newPorder.category = porder['category'];
         myOrder.add(newPorder);
       }
 
@@ -476,9 +495,6 @@ class ViewModel extends ChangeNotifier {
 
   Future<int> buy(int quantity, Product product, String storeId) async {
     try {
-      print(quantity);
-      print(product.id);
-      print(storeId);
       final Map<String, dynamic> data = {
         "quantity": quantity,
         "productId": product.id,
@@ -491,7 +507,7 @@ class ViewModel extends ChangeNotifier {
           headers: {'Content-Type': 'application/json'});
       if (response.body == "success") {
         return 1;
-      }else{
+      } else {
         return 0;
       }
     } catch (e) {

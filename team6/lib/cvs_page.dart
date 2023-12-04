@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:team6/basic_information.dart';
 import 'package:team6/control_app.dart';
-import 'package:team6/map_page.dart';
 import 'package:team6/shared_widgets.dart';
 
 class CVSPage extends ConsumerStatefulWidget {
@@ -62,7 +61,17 @@ class _CVSPageState extends ConsumerState<CVSPage>
                 controller: tabController,
                 children: List.generate(category.length + 1, (index) {
                   if (index == 0) {
+                    if (provider.storeLoading) {
+                      return Center(
+                        child: Image.asset('assets/Waiting.png'),
+                      );
+                    }
                     return const CVSItemsAll();
+                  }
+                  if (provider.storeLoading) {
+                    return Center(
+                      child: Image.asset('assets/Waiting.png'),
+                    );
                   }
                   return CVSItems(categoryIndex: index - 1);
                 })),
@@ -203,8 +212,17 @@ class CVSProduct extends ConsumerWidget {
                                   showDialog(
                                       context: context,
                                       builder: (context) {
-                                        return const AlertDialog(
-                                          content: Text("결제 성공"),
+                                        return AlertDialog(
+                                          content: Container(
+                                              width: 160,
+                                              height: 80,
+                                              child: const Center(
+                                                  child: Text(
+                                                "결제 성공",
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                ),
+                                              ))),
                                         );
                                       });
                                 } else {
@@ -212,8 +230,17 @@ class CVSProduct extends ConsumerWidget {
                                   showDialog(
                                       context: context,
                                       builder: (context) {
-                                        return const AlertDialog(
-                                          content: Text("결제 실패"),
+                                        return AlertDialog(
+                                          content: Container(
+                                              width: 160,
+                                              height: 80,
+                                              child: const Center(
+                                                  child: Text(
+                                                "결제 실패",
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                ),
+                                              ))),
                                         );
                                       });
                                 }
@@ -227,47 +254,76 @@ class CVSProduct extends ConsumerWidget {
                     ],
                     content: Container(
                       width: 300,
-                      height: 300,
+                      height: 200,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
                             width: 280,
                             height: 30,
                             child: Center(
-                              child: Text(categoryIndex == -1
-                                  ? provider.selectedStore
-                                      .products[productIndex].name!
-                                  : provider
-                                      .selectedStore
-                                      .productForCategory[category[
-                                          categoryIndex]]![productIndex]
-                                      .name!),
+                              child: Text(
+                                  categoryIndex == -1
+                                      ? provider.selectedStore
+                                          .products[productIndex].name!
+                                      : provider
+                                          .selectedStore
+                                          .productForCategory[category[
+                                              categoryIndex]]![productIndex]
+                                          .name!,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20)),
                             ),
                           ),
                           Container(
                             width: 280,
                             height: 30,
                             child: Center(
-                              child: Text(provider.selectedStore.name!),
-                            ),
-                          ),
-                          Container(
-                            width: 280,
-                            height: 50,
-                            margin: const EdgeInsets.only(top: 10),
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey, width: 1),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Center(
-                              child: TextField(
-                                controller: tcontroller,
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
+                              child: Text(
+                                provider.selectedStore.name!,
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                width: 80,
+                                height: 50,
+                                padding: const EdgeInsets.all(10),
+                                margin: const EdgeInsets.all(10),
+                                child: Center(
+                                    child: Text(
+                                  "수량",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w400),
+                                )),
+                              ),
+                              Container(
+                                width: 180,
+                                height: 50,
+                                margin: const EdgeInsets.only(top: 10),
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.grey, width: 1),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: TextField(
+                                    controller: tcontroller,
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -582,7 +638,17 @@ class _CVSListPageState extends ConsumerState<CVSListPage>
                 controller: tabController,
                 children: List.generate(category.length + 1, (index) {
                   if (index == 0) {
+                    if (provider.storeLoading) {
+                      return Center(
+                        child: Image.asset('assets/Waiting.png'),
+                      );
+                    }
                     return const OCVSItemsAll();
+                  }
+                  if (provider.storeLoading) {
+                    return Center(
+                      child: Image.asset('assets/Waiting.png'),
+                    );
                   }
                   return OCVSItems(categoryIndex: index - 1);
                 })),
@@ -779,9 +845,18 @@ class OCVSProduct extends ConsumerWidget {
                                         showDialog(
                                             context: context,
                                             builder: (context) {
-                                              return const AlertDialog(
-                                                content: Center(
-                                                    child: Text("주문 성공")),
+                                              return AlertDialog(
+                                                content: Container(
+                                                  width: 160,
+                                                  height: 80,
+                                                  child: Center(
+                                                      child: Text(
+                                                    "주문 성공",
+                                                    style: TextStyle(
+                                                      fontSize: 20,
+                                                    ),
+                                                  )),
+                                                ),
                                               );
                                             });
                                       } else {
@@ -789,9 +864,18 @@ class OCVSProduct extends ConsumerWidget {
                                         showDialog(
                                             context: context,
                                             builder: (context) {
-                                              return const AlertDialog(
-                                                content: Center(
-                                                    child: Text("주문 실패")),
+                                              return AlertDialog(
+                                                content: Container(
+                                                  width: 160,
+                                                  height: 80,
+                                                  child: Center(
+                                                      child: Text(
+                                                    "주문 실패",
+                                                    style: TextStyle(
+                                                      fontSize: 20,
+                                                    ),
+                                                  )),
+                                                ),
                                               );
                                             });
                                       }
@@ -844,17 +928,20 @@ class OCVSProduct extends ConsumerWidget {
                                 Row(
                                   children: [
                                     Container(
-                                      width: 60,
+                                      width: 80,
                                       height: 50,
                                       padding: const EdgeInsets.all(10),
                                       margin: const EdgeInsets.all(10),
-                                      child: Center(child: Text("수량", style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w400
-                                      ),)),
+                                      child: Center(
+                                          child: Text(
+                                        "수량",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w400),
+                                      )),
                                     ),
                                     Container(
-                                      width: 200,
+                                      width: 180,
                                       height: 50,
                                       margin: const EdgeInsets.only(top: 10),
                                       padding: const EdgeInsets.all(10),
