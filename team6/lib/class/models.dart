@@ -3,12 +3,20 @@ class Product{
   String? name;
   double? price;
   String? category;
+  int? quantity;
+  bool? hasEvent;
+  bool? hasFavorite;
+  String? imageUrl;
 
   void getJson(dynamic json){
     id = json['productId'];
     name = json['name'];
     price = json['price'];
     category = json['category'];
+    quantity = json['quantity'];
+    hasEvent = json['hasEvent'];
+    hasFavorite = json['hasFavorite'];
+    imageUrl = json['image_Url'];
   }
 }
 
@@ -19,10 +27,11 @@ class CVS{
   String? pNumber;
   double? locX;
   double? locY;
-  String? oId;
+  String? imageUrl;
+  int? revenue;
   List<Product> products = <Product>[];
   List<Payment> payents = <Payment>[];
-  List<Porder> porders = <Porder>[];
+  Map<String, List<Product>> productForCategory = <String, List<Product>>{};
   void getJson(var json){
     id = json['id'];
     name = json['name'];
@@ -30,7 +39,6 @@ class CVS{
     pNumber = json['phonenumber'];
     locX = json['Location_X'];
     locY = json['Location_Y'];
-    oId = json['Owner_Id'];
   }
 }
 
@@ -68,7 +76,11 @@ class Favorite{
   String? cvsName;
   String? pName;
   String? pCategory;
+  String? pId;
   int? pPrice;
+  int? quantity;
+  String? imageUrl;
+  String? arrivalTime;
   void getJson(var json){
     cvsId = json['StoreId'];
     cvsName = json['StoreName'];
@@ -83,7 +95,11 @@ class Porder{
   int? quantity;
   String? arrival;
   String? arrivalState;
-  Product? product;
+  String? pName;
+  String? pId;
+  int? pPrice;
+  String? category;
+  String? imageUrl;
   void getJson(dynamic json){
     id = json['PorderId'];
     quantity = json['Quantity'];
@@ -111,6 +127,7 @@ class Event{
   String? policy;
   String? estart;
   String? eend;
+  String? imageUrl;
   List<Product> products = <Product>[];
   void getJson(var json){
     id = json['EventId'];

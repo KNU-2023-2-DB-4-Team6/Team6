@@ -1,2 +1,12 @@
-
-List<String> category = ["주류", "음료", "스낵", "푸드", "유제품", "의료용품"];
+List<String> category = [
+  'alcoholic beverages',
+  'beverages',
+  'medical supplies',
+  'cigarette',
+  'household goods',
+  'snack',
+  'dairy product',
+  'frozen food',
+  'food',
+  'etc'
+];

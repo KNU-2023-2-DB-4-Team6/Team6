@@ -234,7 +234,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
-                                  title: Text("로그인 성공"),
+                                  title: const Text("회원가입 성공"),
                                   actions: [
                                     ElevatedButton(
                                         onPressed: () {

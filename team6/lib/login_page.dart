@@ -156,7 +156,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       (value) {
                         setState(() {
                           if (loginResult > 0) {
-                            context.go('/MAP');
+                            if (provider.state == 'client') {
+                              context.go('/MAP');
+                              provider.cvsLocation();
+                              provider.eventList();
+                            } else {
+                              context.go('/OwnerProfile');
+                              provider.getMyCVS();
+                            }
                           } else {
                             loginState = false;
                           }

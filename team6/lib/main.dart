@@ -19,42 +19,53 @@ final GoRouter _router = GoRouter(
   initialLocation: "/",
   routes: <RouteBase>[
     GoRoute(
-        path: "/",
-        builder: (context, state) {
-          return const LoginPage();
-        },
-        routes: <RouteBase>[
-          GoRoute(
-            path: 'SignUp',
-            builder:(context, state) {
-              return const SignUpPage();
-            },
-          ),
-          GoRoute(
-            path: 'CVS',
-            builder: (context, state) {
-              return const CVSPage();
-            },
-          ),
-          GoRoute(
-            path: 'Map',
-            builder: (context, state) {
-              return const MapPage();
-            },
-          ),
-          GoRoute(
-            path: 'AddCVS',
-            builder: (context, state) {
-              return const AddCVSPage();
-            },
-          ),
-          GoRoute(
-            path: 'Profile',
-            builder: (context, state) {
-              return const ProfilePage();
-            },
-          ),
-        ]),
+      path: "/",
+      builder: (context, state) {
+        return const LoginPage();
+      },
+    ),
+    GoRoute(
+      path: '/SignUp',
+      builder: (context, state) {
+        return const SignUpPage();
+      },
+    ),
+    GoRoute(
+      path: '/CVS',
+      builder: (context, state) {
+        return const CVSPage();
+      },
+    ),
+    GoRoute(
+      path: '/CVSList',
+      builder: (context, state) {
+        return const CVSListPage();
+      },
+    ),
+    GoRoute(
+      path: '/Map',
+      builder: (context, state) {
+        return const MapPage();
+      },
+    ),
+    GoRoute(
+      path: '/AddCVS',
+      builder: (context, state) {
+        return const AddCVSPage();
+      },
+    ),
+    GoRoute(
+      path: '/Profile',
+      builder: (context, state) {
+        return const ProfilePage();
+      },
+    ),
+    GoRoute(
+      path: '/OwnerProfile',
+      builder: (context, state) {
+        return const OwnerProfile();
+      },
+    ),
   ],
 );
 

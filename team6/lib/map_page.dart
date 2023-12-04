@@ -26,7 +26,6 @@ class _MapPageState extends ConsumerState<MapPage> {
     final provider = ref.watch(viewmodel);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(),
       body: Row(
         children: [
           const SideBar(),
@@ -48,6 +47,7 @@ class _MapPageState extends ConsumerState<MapPage> {
                   child: GestureDetector(
                     onTap: () {
                       context.go('/Profile');
+                      provider.getMyFavorites();
                     },
                     child: ClipOval(
                       child: Container(
@@ -80,24 +80,89 @@ class _MapPageState extends ConsumerState<MapPage> {
                 ),
                 Positioned(
                   bottom: 20,
-                  left: 40,
+                  right: 40,
                   child: Container(
-                    width: size.width - 440,
+                    width: 750,
                     height: 200,
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: Colors.pink,
+                      color: Colors.white,
+                      border: Border.all(width: 1, color: color2),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Column(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(provider.selectedStore.name ?? ""),
-                        Text(provider.selectedStore.address ?? ""),
-                        Text(provider.selectedStore.pNumber ?? ""),
-                        TextButton(
-                          onPressed: (){
-                            context.go('/CVS');
-                          },
-                          child: Text("편의점 바로가기"),
+                        Container(
+                          width: 180,
+                          height: 180,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Image.network(provider
+                                  .selectedStore.imageUrl ??
+                              "https://gdimg.gmarket.co.kr/3014545259/still/400?ver=1687144763"),
+                        ),
+                        Container(
+                          width: 300,
+                          height: 180,
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                provider.selectedStore.name ?? "",
+                                style: const TextStyle(
+                                  fontSize: 21,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                provider.selectedStore.address ?? "",
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                provider.selectedStore.pNumber ?? "",
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: 180,
+                          height: 80,
+                          child: OutlinedButton(
+                            onPressed: () {
+                              if (provider.selectedStore.id == null) {
+                                return;
+                              }
+                              context.push('/CVS');
+                              provider.storeInformation(provider.selectedStore);
+                            },
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: color2,
+                              side: BorderSide(
+                                color: Colors.transparent,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: const Text(
+                              "편의점 바로가기",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -134,10 +199,10 @@ class _SideBarState extends ConsumerState<SideBar> {
           Container(
             width: 350,
             height: 50,
-            margin: const EdgeInsets.symmetric(horizontal: 30),
+            margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
             decoration: BoxDecoration(
-              color: color1,
+              border: Border.all(color: color2),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Autocomplete(
@@ -146,6 +211,17 @@ class _SideBarState extends ConsumerState<SideBar> {
                 return provider.possibleProducts;
               },
               optionsMaxHeight: 500,
+              fieldViewBuilder: (context, textEditingController, focusNode,
+                  onFieldSubmitted) {
+                return TextField(
+                  controller: textEditingController,
+                  focusNode: focusNode,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "ProductName",
+                  ),
+                );
+              },
               optionsViewBuilder: (context, onSelected, options) {
                 return Align(
                   alignment: Alignment.topLeft,
@@ -166,7 +242,6 @@ class _SideBarState extends ConsumerState<SideBar> {
                         itemBuilder: (BuildContext context, int index) {
                           return GestureDetector(
                             onTap: () async {
-                              print(index);
                               await provider
                                   .productCVS(provider.possibleProducts[index]);
                               setState(() {});
@@ -214,12 +289,14 @@ class SideBarCVS extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.watch(viewmodel);
     return Container(
-      width: 310,
-      height: 200,
+      width: 312,
+      height: 202,
       margin: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: color5,
+          border: Border.all(color: color2),
           boxShadow: const [
             BoxShadow(
               color: Colors.grey,
@@ -229,10 +306,55 @@ class SideBarCVS extends ConsumerWidget {
           ]),
       child: Column(
         children: [
-          Text(provider.events[index].name ?? "Event Name"),
-          Text(provider.events[index].estart ?? "2023.01.01"),
-          Text(provider.events[index].eend ?? "2023.12.31"),
-          Text(provider.events[index].policy ?? "policy"),
+          Row(
+            children: [
+              Container(
+                width: 100,
+                height: 80,
+                child: Image.network(
+                  provider.events[index].imageUrl ??
+                      "https://gdimg.gmarket.co.kr/3014545259/still/400?ver=1687144763",
+                ),
+              ),
+              Container(
+                width: 190,
+                height: 80,
+                padding: const EdgeInsets.only(left: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Container(
+                      width: 190,
+                      height: 30,
+                      child: Text(
+                        provider.events[index].name ?? "Event Name",
+                        style: const TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 190,
+                      height: 50,
+                      child: Column(
+                        children: [
+                          Text(provider.events[index].estart ?? "2023.01.01"),
+                          Text(provider.events[index].eend ?? "2023.12.31"),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Container(
+            width: 290,
+            height: 90,
+            margin: const EdgeInsets.only(top: 10),
+            child: SingleChildScrollView(
+                child: Text(provider.events[index].policy ?? "policy")),
+          ),
         ],
       ),
     );
