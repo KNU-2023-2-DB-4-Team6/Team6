@@ -9,7 +9,7 @@ import 'package:team6/class/models.dart';
 final viewmodel = ChangeNotifierProvider<ViewModel>((ref) => ViewModel());
 
 class ViewModel extends ChangeNotifier {
-  final serverUrl = 'http://172.30.1.62:8080';
+  final serverUrl = 'http://172.30.1.25:8080';
   Client me = Client();
   Owner me2 = Owner();
   String state = "client";
